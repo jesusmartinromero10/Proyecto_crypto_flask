@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>MOVIMIENTOS</h1>
+
+<table>
+    <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Hora</th>
+          <th>Moneda_From</th>
+          <th>Cantidad_From</th>
+          <th>Moneda_To</th>
+          <th>Cantidad_to</th>
+          <th>Precio Unitario</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for movement in data %}
+      <tr>
+          <td>{{ movement.Fecha }}</td>
+          <td>{{ movement.Hora}}</td>
+          <td>{{ movement.Moneda_from }}</td>
+          <td>{{ movement.Cantidad_from }}</td>
+          <td>{{ movement.Moneda_to }}</td>
+          <td>{{ movement.Cantidad_to }}</td>
+          <td>{{ movement.PU }}</td>
+          
+      </tr>
+      {% endfor %}
+  </tbody>
+</table> 
+
+
+{% endblock %}  
