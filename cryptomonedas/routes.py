@@ -4,7 +4,7 @@ from cryptomonedas import app
 import sqlite3
 from cryptomonedas.forms import Moneda
 from config import apikey
-from cryptomonedas.models import select_all, insert, peticion_crypto
+from cryptomonedas.models import select_all, insert, peticion_crypto, invertido, recuperado, union, valorActual, valorCompra
 from datetime import datetime, date
 import requests
 
@@ -56,3 +56,12 @@ def comprar():
         except:
             flash("Has pasado limite de consultas")
             return redirect(url_for("index"))
+
+
+@app.route("/status")
+def estado():
+    try:
+        return render_template("status.html", inv = invertido(), rec = recuperado(), vComp = valorCompra(), vAct = valorActual())
+    except:
+        flash("Error de calculo intentelo mas tarde")
+        return redirect(url_for('index'))

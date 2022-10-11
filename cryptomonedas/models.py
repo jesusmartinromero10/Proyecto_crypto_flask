@@ -38,3 +38,51 @@ def peticion_crypto(moneda_from_data, moneda_to_data, apikey):
     url = requests.get(f"https://rest.coinapi.io/v1/exchangerate/{moneda_from_data}/{moneda_to_data}?&apikey={apikey}")
     resultado = url.json()
     return resultado
+
+def invertido():
+    conn= sqlite3.connect(ORIGIN_DATA)
+    cur = conn.cursor()
+    cur.execute("SELECT Cantidad_from FROM movements WHERE Moneda_from = 'EUR'")
+    result = filas_to_diccionario(cur.fetchall(), cur.description)
+    conn.close()
+    return result
+
+def recuperado():
+    conn= sqlite3.connect(ORIGIN_DATA)
+    cur = conn.cursor()
+    cur.execute("SELECT SUM(Cantidad_to) as Cantidad_to FROM movements WHERE Moneda_to = 'EUR'")
+    result = filas_to_diccionario(cur.fetchall(), cur.description)
+    conn.close()
+    return result
+
+def valorCompra():
+    conn= sqlite3.connect(ORIGIN_DATA)
+    cur = conn.cursor()
+    cur.execute("SELECT (SUM (Cantidad_from) - SUM(Cantidad_to ) ) as valorCompra FROM movements WHERE Moneda_to = 'EUR'")
+    result = filas_to_diccionario(cur.fetchall(), cur.description)
+    conn.close()
+    return result
+
+def valorActual():
+    conn= sqlite3.connect(ORIGIN_DATA)
+    cur = conn.cursor()
+    cur.execute("SELECT Cantidad_from FROM movements WHERE Moneda_from = 'EUR'")
+    result = filas_to_diccionario(cur.fetchall(), cur.description)
+    conn.close()
+    return result
+
+def union():
+    resultadazo = []
+    conn= sqlite3.connect(ORIGIN_DATA)
+    cur = conn.cursor()
+    cur.execute("SELECT Cantidad_from FROM movements WHERE Moneda_from = 'EUR'")
+    result = filas_to_diccionario(cur.fetchall(), cur.description)
+    resultadazo.append(result)
+    cur.execute("SELECT SUM(Cantidad_to) as Cantidad_to FROM movements WHERE Moneda_to = 'EUR'")
+    resulto = filas_to_diccionario(cur.fetchall(), cur.description)
+    resultadazo.append(resulto)
+    cur.execute("SELECT (SUM (Cantidad_from) - SUM(Cantidad_to ) ) as valorCompra FROM movements WHERE Moneda_to = 'EUR'")
+    resulta = filas_to_diccionario(cur.fetchall(), cur.description)
+    resultadazo.append(resulta)
+    conn.close()
+    return resultadazo
