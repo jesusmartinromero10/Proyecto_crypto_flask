@@ -24,7 +24,7 @@
 
     <a href="/purchase">
         <span class="material-symbols-outlined">
-        calculate{{ formulario.submitCalcular }}
+        {{ formulario.submitCalcular }}
         </span>
    </a>
 
@@ -37,11 +37,11 @@
     {% endif %}
    
    <p>Q: {{ resultado }}</p>
-   <p>P.U: {{ Total }}</p>
+   <p>P.U: {{ Tasa }}</p>
 
    <a href="/purchase">
     <span class="material-symbols-outlined">
-    done_outline{{ formulario.submitCompra }}
+   {{ formulario.submitCompra }}
     </span>
 </a>
    
