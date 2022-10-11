@@ -13,9 +13,13 @@
           <th>Moneda_To</th>
           <th>Cantidad_to</th>
           <th>Precio Unitario</th>
+        
     </tr>
+  
   </thead>
+ 
   <tbody>
+      
       {% for movement in data %}
       <tr>
           <td>{{ movement.Fecha }}</td>
@@ -28,8 +32,11 @@
           
       </tr>
       {% endfor %}
+     
   </tbody>
 </table> 
-
+{% if data == [] %}
+<p>SIN MOVIMIENTOS</p>
+{% endif %}
 
 {% endblock %}  

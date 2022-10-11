@@ -1,7 +1,8 @@
+from lib2to3.pytree import convert
 import sqlite3
 from config import *
-
-
+import requests
+from datetime import *
 def filas_to_diccionario(filas, columnas):
 
     resultado = []
@@ -23,3 +24,17 @@ def select_all():
     result = filas_to_diccionario(cur.fetchall(), cur.description)
     conn.close()
     return result
+
+
+def insert(registro):
+  
+    conn = sqlite3.connect(ORIGIN_DATA)
+    cur = conn.cursor()
+    cur.execute("INSERT INTO movements (Fecha, Hora, Moneda_from, Cantidad_from, Moneda_to, cantidad_to) values(?,?,?,?,?,?)", [datetime.now(), datetime.now(),registro[2],registro[3],registro[4],registro[5]])
+    conn.commit()
+    conn.close()
+
+def peticion_crypto(moneda_from_data, moneda_to_data, apikey):
+    url = requests.get(f"https://rest.coinapi.io/v1/exchangerate/{moneda_from_data}/{moneda_to_data}?&apikey={apikey}")
+    resultado = url.json()
+    return resultado
