@@ -23,31 +23,44 @@ def index():
 
 @app.route("/purchase", methods=["GET", "POST"])
 def comprar():
-    registros = Moneda()
+    moneda = Moneda()
+    registros = select_all()
+    valorCantidad = request.values.get("inputCantidad") 
+    valorMonedaFrom = request.values.get('moneda_from')
+    valorMonedaTo = request.values.get('moneda_to')
     if request.method == "GET":
-        return render_template("/purchase.html", PageTitle = "Comprar", formulario = registros, cabecera = 'purchase.html')
+        return render_template("/purchase.html", PageTitle = "Comprar", formulario = moneda, cabecera = 'purchase.html')
     
     else:
         try:
             if request.values.get("submitCalcular"):
-                resultado = peticion_crypto(registros.moneda_from.data, registros.moneda_to.data, apikey)
-                total = resultado['rate'] * float(request.values.get("inputCantidad"))
-                tasa = resultado['rate'] 
-                return render_template("/purchase.html", resultado = total, Tasa = tasa, formulario = registros)
+                
+                try:
+                    resultado = peticion_crypto(moneda.moneda_from.data, moneda.moneda_to.data, apikey)
+                    total = resultado['rate'] * float(valorCantidad)
+                    #total = float("{:2f}".format(total))
+                    tasa = resultado['rate'] 
+                    return render_template("/purchase.html", resultado = total, Tasa = tasa, formulario = moneda, cabecera = "purchase.html")
+                except:
+                    flash("Error conexion con Api, intentelo pasados unos minutos")
+                    return redirect(url_for("index"))
         
       
 
             elif request.values.get("submitCompra"):
 
                 try:
-                    if request.values.get('moneda_from') == request.values.get('moneda_to'):
+                    if registros == [] and valorMonedaFrom != "EUR":
+                        flash("La primera compra de Cryptomonedas tiene que ser compradas con Euros")
+                        return redirect(url_for("purchase.html"))
+                    if valorMonedaFrom == valorMonedaTo:
                         flash("Las monedas no pueden ser las mismas")
                         return redirect(url_for('comprar'))
 
-                    if registros.validate():
-                        resultado = peticion_crypto(registros.moneda_from.data, registros.moneda_to.data, apikey)
-                        total = resultado['rate'] * float(request.values.get("inputCantidad"))
-                        insert([datetime.now().time(), datetime.now().date(), resultado["asset_id_base"], request.values.get('inputCantidad'), resultado["asset_id_base"], total])
+                    if moneda.validate():
+                        resultado = peticion_crypto(moneda.moneda_from.data, moneda.moneda_to.data, apikey)
+                        total = resultado['rate'] * float(valorCantidad)
+                        insert([datetime.now().time(), datetime.now().date(), resultado["asset_id_base"], valorCantidad, resultado["asset_id_base"], total])
                     flash("Compra realizada correctamente")
                     return redirect(url_for('index'))
                 except sqlite3.Error as e:
@@ -60,7 +73,7 @@ def comprar():
                 return redirect(url_for('index'))
         
         except:
-            flash("Has pasado limite de consultas")
+            flash("Error, vuelva a intentarlo")
             return redirect(url_for("index"))
 
 
