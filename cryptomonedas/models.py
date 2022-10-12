@@ -42,7 +42,7 @@ def peticion_crypto(moneda_from_data, moneda_to_data, apikey):
 def invertido():
     conn= sqlite3.connect(ORIGIN_DATA)
     cur = conn.cursor()
-    cur.execute("SELECT Cantidad_from FROM movements WHERE Moneda_from = 'EUR'")
+    cur.execute("SELECT SUM(Cantidad_from) as Cantidad_from FROM movements WHERE Moneda_from = 'EUR'")
     result = filas_to_diccionario(cur.fetchall(), cur.description)
     conn.close()
     return result
@@ -58,12 +58,12 @@ def recuperado():
 def valorCompra():
     conn= sqlite3.connect(ORIGIN_DATA)
     cur = conn.cursor()
-    cur.execute("SELECT (SUM (Cantidad_from) - SUM(Cantidad_to ) ) as valorCompra FROM movements WHERE Moneda_to = 'EUR'")
+    cur.execute("SELECT (SUM(Cantidad_from) - SUM(Cantidad_to ) ) as valorCompra FROM movements WHERE Moneda_to = 'EUR'")
     result = filas_to_diccionario(cur.fetchall(), cur.description)
     conn.close()
     return result
 
-def valorActual():
+def valorActual_():
     conn= sqlite3.connect(ORIGIN_DATA)
     cur = conn.cursor()
     cur.execute("SELECT Cantidad_from FROM movements WHERE Moneda_from = 'EUR'")
@@ -86,3 +86,21 @@ def union():
     resultadazo.append(resulta)
     conn.close()
     return resultadazo
+
+def valorActual():
+    conn= sqlite3.connect(ORIGIN_DATA)
+    cur = conn.cursor()
+    cur.execute("SELECT (SELECT SUM(CANTIDAD_FROM) FROM movements WHERE Moneda_from = 'EUR')  as  eur,(SELECT SUM(CANTIDAD_FROM) FROM movements WHERE Moneda_from = 'BTC') as btc,(SELECT SUM(CANTIDAD_FROM) FROM movements WHERE Moneda_from = 'ETH') as eth FROM movements")
+    result = filas_to_diccionario(cur.fetchall(), cur.description)
+    conn.close()
+    return result 
+
+def cartera(moneda):
+    consulta = f"select ((select sum(Cantidad_to) from movements where Moneda_to = '{moneda}') - (SELECT sum (Cantidad_from) from movements WHERE Moneda_from = '{moneda}')) as {moneda}"
+
+    conn= sqlite3.connect(ORIGIN_DATA)
+    cur = conn.cursor()
+    cur.execute(consulta)
+    result = filas_to_diccionario(cur.fetchall(), cur.description)
+    conn.close()
+    return result  

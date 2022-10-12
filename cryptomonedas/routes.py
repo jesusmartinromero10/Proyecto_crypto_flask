@@ -3,8 +3,8 @@ from flask import redirect, render_template, request, url_for, flash
 from cryptomonedas import app
 import sqlite3
 from cryptomonedas.forms import Moneda
-from config import apikey
-from cryptomonedas.models import select_all, insert, peticion_crypto, invertido, recuperado, union, valorActual, valorCompra
+from config import apikey, cryptos
+from cryptomonedas.models import select_all, insert, peticion_crypto, invertido, recuperado, union, valorActual, valorCompra, cartera
 from datetime import datetime, date
 import requests
 
@@ -38,8 +38,9 @@ def comprar():
                 try:
                     resultado = peticion_crypto(moneda.moneda_from.data, moneda.moneda_to.data, apikey)
                     total = resultado['rate'] * float(valorCantidad)
-                    #total = float("{:2f}".format(total))
-                    tasa = resultado['rate'] 
+                    total = ("{:.8f}".format(total))
+                    tasa = resultado['rate']
+                    tasa = ("{:.8f}".format(tasa))
                     return render_template("/purchase.html", resultado = total, Tasa = tasa, formulario = moneda, cabecera = "purchase.html")
                 except:
                     flash("Error conexion con Api, intentelo pasados unos minutos")
@@ -48,8 +49,9 @@ def comprar():
       
 
             elif request.values.get("submitCompra"):
-
+                
                 try:
+                    
                     if registros == [] and valorMonedaFrom != "EUR":
                         flash("La primera compra de Cryptomonedas tiene que ser compradas con Euros")
                         return redirect(url_for("purchase.html"))
@@ -57,14 +59,20 @@ def comprar():
                         flash("Las monedas no pueden ser las mismas")
                         return redirect(url_for('comprar'))
 
+                    monedero = cartera(valorMonedaFrom)
+                    if valorMonedaFrom != 'EUR' and monedero[0][valorMonedaFrom] < float(valorCantidad):
+                        flash(f"No tienes saldo suficiente de {valorMonedaFrom}")
+                        return redirect(url_for('purchase.html'))
+                    
+
                     if moneda.validate():
                         resultado = peticion_crypto(moneda.moneda_from.data, moneda.moneda_to.data, apikey)
                         total = resultado['rate'] * float(valorCantidad)
-                        insert([datetime.now().time(), datetime.now().date(), resultado["asset_id_base"], valorCantidad, resultado["asset_id_base"], total])
+                        insert([datetime.now().time(), datetime.now().date(), resultado["asset_id_base"], valorCantidad, resultado["asset_id_quote"], total])
                     flash("Compra realizada correctamente")
                     return redirect(url_for('index'))
                 except sqlite3.Error as e:
-                    flash("Se a producido error en la base datos")
+                    flash("Se a producido error en la base datos2")
                     return redirect(url_for('index'))
                 
                 
