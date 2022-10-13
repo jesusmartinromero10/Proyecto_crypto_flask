@@ -96,7 +96,7 @@ def valorActual():
     return result 
 
 def cartera(moneda):
-    consulta = f"select ((select sum(Cantidad_to) from movements where Moneda_to = '{moneda}') - (SELECT sum (Cantidad_from) from movements WHERE Moneda_from = '{moneda}')) as {moneda}"
+    consulta = f"SELECT ((SELECT SUM(Cantidad_to) FROM movements WHERE Moneda_to = '{moneda}') - (SELECT SUM(Cantidad_from) FROM movements WHERE Moneda_from = '{moneda}')) AS {moneda}"
 
     conn= sqlite3.connect(ORIGIN_DATA)
     cur = conn.cursor()
@@ -104,3 +104,33 @@ def cartera(moneda):
     result = filas_to_diccionario(cur.fetchall(), cur.description)
     conn.close()
     return result  
+
+def traerTodasCartera(crypto):
+    cryptosMonedas = {}
+    conn= sqlite3.connect(ORIGIN_DATA)
+    cur = conn.cursor()
+    for moneda in crypto:
+        consulta = f"SELECT ((SELECT SUM(Cantidad_to) FROM movements WHERE Moneda_to = '{moneda}') - (SELECT SUM(Cantidad_from) FROM movements WHERE Moneda_from = '{moneda}')) AS {moneda}"
+        cur.execute(consulta)
+        fila =cur.fetchall() 
+        cryptosMonedas[moneda] = fila[0][0]
+    #result = filas_to_diccionario(cur.fetchall(), cur.description)
+    conn.close()
+     
+    return cryptosMonedas
+
+def totalActivo():
+    total = 0
+    monederoActual = traerTodasCartera(cryptos)
+    for clave in monederoActual.keys():
+        url = requests.get(f"https://rest.coinapi.io/v1/exchangerate/{clave}/EUR?&apikey={apikey}")
+        resultado = url.json()
+        valor = resultado['rate']
+        if monederoActual[clave] != None:
+            total += valor * monederoActual[clave]
+            
+
+    return total
+
+
+  

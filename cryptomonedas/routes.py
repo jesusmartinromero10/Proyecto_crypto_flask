@@ -4,7 +4,7 @@ from cryptomonedas import app
 import sqlite3
 from cryptomonedas.forms import Moneda
 from config import apikey, cryptos
-from cryptomonedas.models import select_all, insert, peticion_crypto, invertido, recuperado, union, valorActual, valorCompra, cartera
+from cryptomonedas.models import select_all, insert, peticion_crypto, invertido, recuperado, traerTodasCartera, union, valorActual, valorCompra, cartera, totalActivo
 from datetime import datetime, date
 import requests
 
@@ -62,7 +62,7 @@ def comprar():
                     monedero = cartera(valorMonedaFrom)
                     if valorMonedaFrom != 'EUR' and monedero[0][valorMonedaFrom] < float(valorCantidad):
                         flash(f"No tienes saldo suficiente de {valorMonedaFrom}")
-                        return redirect(url_for('purchase.html'))
+                        return redirect(url_for('index.html'))
                     
 
                     if moneda.validate():
@@ -88,7 +88,15 @@ def comprar():
 @app.route("/status")
 def estado():
     try:
-        return render_template("status.html", inv = invertido(), rec = recuperado(), vComp = valorCompra(), vAct = valorActual(), cabecera = 'status.html')
+        inv = invertido()
+        rec = recuperado()
+        vComp = inv[0]['Cantidad_from'] - rec[0]['Cantidad_to']
+        #valor_mio = traerTodasCartera(cryptos)
+
+        vActi = totalActivo()
+
+
+        return render_template("status.html", inv = inv, rec = rec, vComp = vComp , vAct = vActi, cabecera = 'status.html')
     except:
         flash("Error de calculo intentelo mas tarde")
         return redirect(url_for('index'))
