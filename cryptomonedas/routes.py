@@ -38,6 +38,9 @@ def comprar():
             if request.values.get("submitCalcular"):
                 
                 try:
+                    if moneda.inputCantidad.data == None:
+                        flash("Introduce en la casilla cantidad un dato numerico o si es decimal usa el . no la , para los decimales")
+                        return redirect(url_for("comprar"))
                     resultado = peticion_crypto(moneda.moneda_from.data, moneda.moneda_to.data, apikey)
                     total = resultado['rate'] * float(valorCantidad)
                     total = ("{:.8f}".format(total))
@@ -47,7 +50,8 @@ def comprar():
                     
 
                     return render_template("/purchase.html", resultado = total, Tasa = tasa, formulario = moneda, cabecera = "purchase.html", cantidad = "texto", valorinput = valorCantidad )
-                except:
+                except Exception as e:
+                    print(e)
                     flash("Error conexion con Api, intentelo pasados unos minutos")
                     return redirect(url_for("index"))
         
@@ -64,7 +68,7 @@ def comprar():
                         flash("Las monedas no pueden ser las mismas")
                         return redirect(url_for('comprar'))
                     if valorCantidad2._value != valorCantidad:
-                        flash("Has cambiado moneda")
+                        flash("Tienes que calcular el valor en el boton de calculadora antes de comprar pillin")
                         return redirect(url_for("comprar"))
                     
 #preguntat ¡¡¡ none monedero
@@ -77,7 +81,7 @@ def comprar():
                     if moneda.validate():
                         resultado = peticion_crypto(moneda.moneda_from.data, moneda.moneda_to.data, apikey)
                         total = resultado['rate'] * float(valorCantidad)
-                        insert([datetime.now().date().isoformat(), datetime.now().time().isoformat(), resultado["asset_id_base"], valorCantidad, resultado["asset_id_quote"], total])
+                        insert([datetime.now().date().isoformat(), str(datetime.now().time().isoformat())[:8], resultado["asset_id_base"], valorCantidad, resultado["asset_id_quote"], total])
 
                         #mone = cartera(valorMonedaFrom)
                         #if valorMonedaFrom != 'EUR' and (mone[0][valorMonedaFrom] == None or mone[0][valorMonedaFrom] < 0):

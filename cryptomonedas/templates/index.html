@@ -3,7 +3,7 @@
 
 <h1>MOVIMIENTOS</h1>
 
-<table>
+<table role = "grid">
     <thead>
         <tr>
           <th>Fecha</th>
@@ -25,10 +25,10 @@
           <td>{{ movement.Fecha }}</td>
           <td>{{ movement.Hora}}</td>
           <td>{{ movement.Moneda_from }}</td>
-          <td>{{ movement.Cantidad_from }}</td>
+          <td>{{ movement.Cantidad_from ~ " " ~ movement.Moneda_from }}</td>
           <td>{{ movement.Moneda_to }}</td>
           <td>{{ "%.8f" | format(movement.Cantidad_to) }}</td>
-          <td>{{ "%.8f" | format(movement.PU)}}</td>
+          <td>{{ movement.PU ~ ' ' ~ movement.Moneda_from }}</td>
           
       </tr>
       {% endfor %}
