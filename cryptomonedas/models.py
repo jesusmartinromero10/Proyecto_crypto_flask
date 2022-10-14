@@ -130,7 +130,7 @@ def totalActivo():
     total = 0
     monederoActual = traerTodasCartera(cryptos)
     for clave in monederoActual.keys():
-        url = requests.get(f"https://rest.coinapi.io/v1/exchangerate/{clave}/EUR?&apikey={apikey3}")
+        url = requests.get(f"https://rest.coinapi.io/v1/exchangerate/{clave}/EUR?&apikey={apikey}")
         resultado = url.json()
         valor = resultado['rate']
         if monederoActual[clave] != None:
@@ -145,7 +145,32 @@ def borrar():
     cur.execute("DELETE from movements where id = (SELECT max(id) from movements)")
     conn.commit() 
     conn.close()
+
+def totalActivo_una_consulta():    
+    total = 0
+    monederoActual = traerTodasCartera(cryptos)
+    url = requests.get(f"https://rest.coinapi.io/v1/exchangerate/EUR?&apikey={apikey}")
+    resultado = url.json()
+
+    for a in monederoActual.keys():
+        for b in resultado['rates']:
+            if b['asset_id_quote'] == a:
+                total += 1/b['rate'] * monederoActual[a]
+                
+    return total
+
+        
+
     
+    
+    
+    
+    
+       
+                
+
+
+
 
 
 

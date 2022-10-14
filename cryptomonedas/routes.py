@@ -4,7 +4,7 @@ from cryptomonedas import app
 import sqlite3
 from cryptomonedas.forms import Moneda
 from config import apikey, cryptos, apikey2, apikey3
-from cryptomonedas.models import cartera2, select_all, insert, peticion_crypto, invertido, recuperado, traerTodasCartera, union, valorActual, valorCompra, cartera, totalActivo, borrar
+from cryptomonedas.models import cartera2, select_all, insert, peticion_crypto, invertido, recuperado, totalActivo_una_consulta, traerTodasCartera, union, valorActual, valorCompra, cartera, totalActivo, borrar
 from datetime import datetime, date
 import requests
 from wtforms import HiddenField
@@ -38,7 +38,7 @@ def comprar():
             if request.values.get("submitCalcular"):
                 
                 try:
-                    resultado = peticion_crypto(moneda.moneda_from.data, moneda.moneda_to.data, apikey3)
+                    resultado = peticion_crypto(moneda.moneda_from.data, moneda.moneda_to.data, apikey)
                     total = resultado['rate'] * float(valorCantidad)
                     total = ("{:.8f}".format(total))
                     tasa = resultado['rate']
@@ -75,7 +75,7 @@ def comprar():
                     
 
                     if moneda.validate():
-                        resultado = peticion_crypto(moneda.moneda_from.data, moneda.moneda_to.data, apikey3)
+                        resultado = peticion_crypto(moneda.moneda_from.data, moneda.moneda_to.data, apikey)
                         total = resultado['rate'] * float(valorCantidad)
                         insert([datetime.now().date().isoformat(), datetime.now().time().isoformat(), resultado["asset_id_base"], valorCantidad, resultado["asset_id_quote"], total])
 
@@ -112,7 +112,7 @@ def estado():
         vComp = inv[0]['Cantidad_from'] - rec[0]['Cantidad_to']
         #valor_mio = traerTodasCartera(cryptos)
 
-        vActi = totalActivo()
+        vActi = totalActivo_una_consulta()
 
 
         return render_template("status.html", inv = inv, rec = rec, vComp = vComp , vAct = vActi, cabecera = 'status.html')
