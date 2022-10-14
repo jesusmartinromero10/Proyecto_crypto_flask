@@ -50,7 +50,6 @@ def invertido():
 def recuperado():
     conn= sqlite3.connect(ORIGIN_DATA)
     cur = conn.cursor()
-    #cur.execute("SELECT (case when (SUM(Cantidad_to)) is null then 0 else SUM(Cantidad_to) end) as tot")
     cur.execute("SELECT (CASE WHEN SUM(Cantidad_to) IS NULL THEN 0 ELSE SUM(Cantidad_to) end) as Cantidad_to FROM movements WHERE Moneda_to = 'EUR'")
     result = filas_to_diccionario(cur.fetchall(), cur.description)
     conn.close()
@@ -60,14 +59,6 @@ def valorCompra():
     conn= sqlite3.connect(ORIGIN_DATA)
     cur = conn.cursor()
     cur.execute("SELECT (SUM(Cantidad_from) - SUM(Cantidad_to ) ) as valorCompra FROM movements WHERE Moneda_to = 'EUR'")
-    result = filas_to_diccionario(cur.fetchall(), cur.description)
-    conn.close()
-    return result
-
-def valorActual_():
-    conn= sqlite3.connect(ORIGIN_DATA)
-    cur = conn.cursor()
-    cur.execute("SELECT Cantidad_from FROM movements WHERE Moneda_from = 'EUR'")
     result = filas_to_diccionario(cur.fetchall(), cur.description)
     conn.close()
     return result
@@ -139,7 +130,7 @@ def totalActivo():
     total = 0
     monederoActual = traerTodasCartera(cryptos)
     for clave in monederoActual.keys():
-        url = requests.get(f"https://rest.coinapi.io/v1/exchangerate/{clave}/EUR?&apikey={apikey2}")
+        url = requests.get(f"https://rest.coinapi.io/v1/exchangerate/{clave}/EUR?&apikey={apikey3}")
         resultado = url.json()
         valor = resultado['rate']
         if monederoActual[clave] != None:
