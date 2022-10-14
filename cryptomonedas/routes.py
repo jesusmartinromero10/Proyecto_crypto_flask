@@ -3,8 +3,8 @@ from flask import redirect, render_template, request, url_for, flash
 from cryptomonedas import app
 import sqlite3
 from cryptomonedas.forms import Moneda
-from config import apikey, cryptos
-from cryptomonedas.models import select_all, insert, peticion_crypto, invertido, recuperado, traerTodasCartera, union, valorActual, valorCompra, cartera, totalActivo
+from config import apikey, cryptos, apikey2
+from cryptomonedas.models import cartera2, select_all, insert, peticion_crypto, invertido, recuperado, traerTodasCartera, union, valorActual, valorCompra, cartera, totalActivo, borrar
 from datetime import datetime, date
 import requests
 
@@ -36,7 +36,7 @@ def comprar():
             if request.values.get("submitCalcular"):
                 
                 try:
-                    resultado = peticion_crypto(moneda.moneda_from.data, moneda.moneda_to.data, apikey)
+                    resultado = peticion_crypto(moneda.moneda_from.data, moneda.moneda_to.data, apikey2)
                     total = resultado['rate'] * float(valorCantidad)
                     total = ("{:.8f}".format(total))
                     tasa = resultado['rate']
@@ -58,21 +58,32 @@ def comprar():
                     if valorMonedaFrom == valorMonedaTo:
                         flash("Las monedas no pueden ser las mismas")
                         return redirect(url_for('comprar'))
-
-                    monedero = cartera(valorMonedaFrom)
-                    if valorMonedaFrom != 'EUR' and monedero[0][valorMonedaFrom] < float(valorCantidad):
+                    
+                    
+#preguntat ¡¡¡ none monedero
+                    monedero = cartera2(valorMonedaFrom, valorCantidad)
+                    if (valorMonedaFrom != 'EUR' and monedero[0][valorMonedaFrom] < float(valorCantidad)):
                         flash(f"No tienes saldo suficiente de {valorMonedaFrom}")
-                        return redirect(url_for('index.html'))
+                        return redirect(url_for('index'))
                     
 
                     if moneda.validate():
-                        resultado = peticion_crypto(moneda.moneda_from.data, moneda.moneda_to.data, apikey)
+                        resultado = peticion_crypto(moneda.moneda_from.data, moneda.moneda_to.data, apikey2)
                         total = resultado['rate'] * float(valorCantidad)
-                        insert([datetime.now().time(), datetime.now().date(), resultado["asset_id_base"], valorCantidad, resultado["asset_id_quote"], total])
+                        insert([datetime.now().date().isoformat(), datetime.now().time().isoformat(), resultado["asset_id_base"], valorCantidad, resultado["asset_id_quote"], total])
+
+                        #mone = cartera(valorMonedaFrom)
+                        #if valorMonedaFrom != 'EUR' and (mone[0][valorMonedaFrom] == None or mone[0][valorMonedaFrom] < 0):
+                         #   borrar()
+                          #  flash("Saldo insuficiente")
+                           # return redirect(url_for('index'))
+
+
                     flash("Compra realizada correctamente")
                     return redirect(url_for('index'))
                 except sqlite3.Error as e:
-                    flash("Se a producido error en la base datos2")
+                    print(e)
+                    flash("Se a producido error en la base datos")
                     return redirect(url_for('index'))
                 
                 
@@ -80,7 +91,8 @@ def comprar():
                 flash('Ha ocurrido un error inesperado, vuelva a intentarlo')
                 return redirect(url_for('index'))
         
-        except:
+        except Exception as e:
+            print(e)
             flash("Error, vuelva a intentarlo")
             return redirect(url_for("index"))
 
@@ -97,6 +109,7 @@ def estado():
 
 
         return render_template("status.html", inv = inv, rec = rec, vComp = vComp , vAct = vActi, cabecera = 'status.html')
-    except:
+    except Exception as e:
+        print(e)
         flash("Error de calculo intentelo mas tarde")
         return redirect(url_for('index'))
