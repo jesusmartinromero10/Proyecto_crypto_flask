@@ -65,14 +65,3 @@ nav{
     margin-left: 20px;
 }
 
-#movimientos {
-    border: solid 2px;
-   
-}
-#movimientos tr th {
-    border: solid 1px;
-}
-
-#movimientos tr td {
-    border-right: solid 1px;
-}

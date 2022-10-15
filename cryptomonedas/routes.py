@@ -124,3 +124,4 @@ def estado():
         print(e)
         flash("Error de calculo intentelo mas tarde")
         return redirect(url_for('index'))
+
