@@ -41,7 +41,7 @@ def comprar():
                     if moneda.inputCantidad.data == None:
                         flash("Introduce en la casilla cantidad un dato numerico o si es decimal usa el . no la , para los decimales")
                         return redirect(url_for("comprar"))
-                    resultado = peticion_crypto(moneda.moneda_from.data, moneda.moneda_to.data, apikey)
+                    resultado = peticion_crypto(moneda.moneda_from.data, moneda.moneda_to.data, apikey2)
                     total = resultado['rate'] * float(valorCantidad)
                     total = ("{:.8f}".format(total))
                     tasa = resultado['rate']
@@ -79,7 +79,7 @@ def comprar():
                     
 
                     if moneda.validate():
-                        resultado = peticion_crypto(moneda.moneda_from.data, moneda.moneda_to.data, apikey)
+                        resultado = peticion_crypto(moneda.moneda_from.data, moneda.moneda_to.data, apikey2)
                         total = resultado['rate'] * float(valorCantidad)
                         insert([datetime.now().date().isoformat(), str(datetime.now().time().isoformat())[:8], resultado["asset_id_base"], valorCantidad, resultado["asset_id_quote"], total])
 

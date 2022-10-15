@@ -1,8 +1,22 @@
+
 header, footer {
     background-color: var(--primary);
     color: var(--primary-inverse);
     font-size: 1.4em;
     font-weight: bold;
+    padding: 0;
+}
+#footer {
+    padding: 0;
+    padding-bottom: 55px;
+    padding-top: 20px;
+    font-weight: unset; 
+}
+
+#header {
+    padding: 0;
+    padding-top: 35px;
+    padding-bottom: 35px;
 }
 
 body {
@@ -43,3 +57,22 @@ nav{
     margin-left: 10px;
 }
 
+#span_header {
+    margin-left: 20px;
+}
+
+#span_footer {
+    margin-left: 20px;
+}
+
+#movimientos {
+    border: solid 2px;
+   
+}
+#movimientos tr th {
+    border: solid 1px;
+}
+
+#movimientos tr td {
+    border-right: solid 1px;
+}

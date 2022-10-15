@@ -8,16 +8,16 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <title>Tus Cryptomonedas</title>
 </head>
-<header class="cabecera">myCRYPTO</header>
+<header class="cabecera" id = header><span id="span_header">myCRYPTO</span></header>
 <body>
-    <nav>
+    <nav aria-label="breadcrumb">
     {% if cabecera == 'index.html' %}
     <nav>
         <span>Inicio</span> 
         /
         <a href="/purchase" class="container">Compras</a>
         /
-        <a href="/status" class = "container">Status</a>
+        <a href="/status" class = "container">Estado</a>
     </nav>
     {% endif %}
 
@@ -27,7 +27,7 @@
         /
         <span>Compras</span>
         /
-        <a href="/status" class = "container">Status</a>
+        <a href="/status" class = "container">Estado</a>
     </nav>
     {% endif %}
 
@@ -57,7 +57,7 @@
     </section>
     <footer class = cabecera id = footer>
         
-        &copy; 2022 -JMR Todos los derechos reservados
+        <span id = span_footer>&copy; 2022 -JMR Todos los derechos reservados</span>
         
     </footer>
 </body>
