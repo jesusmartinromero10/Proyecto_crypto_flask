@@ -1,5 +1,5 @@
 # WEB CRYPTOMONEDAS
-- Proyecto Final BootCamp Zero - IV Edición | KeepCoding
+- Proyecto Final BootCamp Zero - XII Edición | KeepCoding
 
 - Aplicación web en Flask
 
