@@ -12,7 +12,7 @@ Para recuperar el valor de las criptos hemos utilizado la API Coinapi.io
 
 ## Instalación 🔧
 
-- Obtener la apikey en Coinapi.io.
+- Obtener la apikey en https://www.coinapi.io/ 
 - Obtener una Scret Key en https://randomkeygen.com/ 
 - Hacer una copia del fichero `config_template.py`:
     - En apikey  poner tu clave
