@@ -3,6 +3,8 @@ import sqlite3
 from config import *
 import requests
 from datetime import *
+
+
 def filas_to_diccionario(filas, columnas):
 
     resultado = []

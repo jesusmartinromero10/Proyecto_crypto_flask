@@ -27,8 +27,8 @@
           <td>{{ movement.Moneda_from }}</td>
           <td>{{ movement.Cantidad_from ~ " " ~ movement.Moneda_from }}</td>
           <td>{{ movement.Moneda_to }}</td>
-          <td>{{ "%.8f" | format(movement.Cantidad_to) }}</td>
-          <td>{{ "%.8f" | format (movement.PU) }}</td>
+          <td>{{ "%.8f" | format (movement.Cantidad_to) ~ " " ~ movement.Moneda_to }}</td>
+          <td>{{ "%.8f" | format (movement.PU) ~ " " ~ movement.Moneda_from}}</td>
           
       </tr>
       {% endfor %}
