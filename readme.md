@@ -45,5 +45,7 @@ flask run
 ```
 - Si el servidor 5000 esta ocupado ejecutar entonces
 ```
+<<<<<<< HEAD
 flask run -p 5001
 ```
+
