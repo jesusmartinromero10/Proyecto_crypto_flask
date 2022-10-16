@@ -20,7 +20,7 @@ def filas_to_diccionario(filas, columnas):
 def select_all():
     conn= sqlite3.connect(ORIGIN_DATA)
     cur = conn.cursor()
-    cur.execute("SELECT id, Fecha, Hora, moneda_from, cantidad_from, Moneda_to, Cantidad_to, (cantidad_from/Cantidad_to) as PU from movements;")
+    cur.execute("SELECT id, Fecha, Hora, moneda_from, cantidad_from, Moneda_to, Cantidad_to, (cantidad_from/Cantidad_to) as PU from movements order by Fecha;")
     result = filas_to_diccionario(cur.fetchall(), cur.description)
     conn.close()
     return result

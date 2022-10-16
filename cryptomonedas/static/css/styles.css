@@ -7,10 +7,13 @@ header, footer {
     padding: 0;
 }
 #footer {
-    padding: 0;
-    padding-bottom: 55px;
-    padding-top: 20px;
-    font-weight: unset; 
+    position:fixed;
+    left:0px;
+    bottom:0px;
+    
+    
+    font-size: 0.8em;
+    padding: 10px;
 }
 
 #header {
@@ -65,3 +68,14 @@ nav{
     margin-left: 20px;
 }
 
+#movimientos {
+    border: solid 2px;
+   
+}
+#movimientos tr th {
+    border: solid 1px;
+}
+
+#movimientos tr td {
+    border-right: solid 1px;
+}

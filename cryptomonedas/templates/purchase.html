@@ -22,7 +22,7 @@
         {% endfor %}
     {% endif %}
 
-    <a href="/purchase">
+    <a href="/purchase" data-tooltip="Pulsa para calcular precio" data-placement="bottom">
         <span class="material-symbols-outlined">
         {{ formulario.submitCalcular }}
         </span>
@@ -39,7 +39,7 @@
    <p>Q: {{ resultado }}</p>
    <p>P.U: {{ Tasa }}</p>
 
-   <a href="/purchase">
+   <a href="/purchase" data-tooltip="Pulsa para hacer la compra" data-placement="bottom">
     <span class="material-symbols-outlined">
    {{ formulario.submitCompra }}
     </span>
