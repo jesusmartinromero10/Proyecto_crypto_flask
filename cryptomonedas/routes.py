@@ -110,18 +110,25 @@ def comprar():
 
 @app.route("/status")
 def estado():
-    try:
-        inv = invertido()
-        rec = recuperado()
-        vComp = inv[0]['Cantidad_from'] - rec[0]['Cantidad_to']
-        #valor_mio = traerTodasCartera(cryptos)
+    inver = invertido()
+    if inver[0]['Cantidad_from'] == None:
+        flash("No hay compras de Cryptomonedas")
+        return render_template("status.html", inv = [{'Cantidad_from': 0}], rec = [{'Cantidad_to': 0}], vComp = 0, vAct = 0, cabecera = 'status.html')
+        
+    else:   
+        
+        try:
+            inv = invertido()
+            rec = recuperado()
+            vComp = inv[0]['Cantidad_from'] - rec[0]['Cantidad_to']
+            #valor_mio = traerTodasCartera(cryptos)
 
-        vActi = totalActivo_una_consulta()
+            vActi = totalActivo_una_consulta()
 
 
-        return render_template("status.html", inv = inv, rec = rec, vComp = vComp , vAct = vActi, cabecera = 'status.html')
-    except Exception as e:
-        print(e)
-        flash("Error de calculo intentelo mas tarde")
-        return redirect(url_for('index'))
+            return render_template("status.html", inv = inv, rec = rec, vComp = vComp , vAct = vActi, cabecera = 'status.html')
+        except Exception as e:
+            print(e)
+            flash("Error de calculo intentelo mas tarde")
+            return redirect(url_for('index'))
 
