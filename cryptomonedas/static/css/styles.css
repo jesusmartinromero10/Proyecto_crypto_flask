@@ -83,3 +83,10 @@ nav{
 #sinmov {
     text-align: center;
 }
+
+#ganancia {
+    color: green;
+}
+#perdida {
+    color: red
+}

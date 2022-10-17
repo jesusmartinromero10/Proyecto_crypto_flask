@@ -113,7 +113,7 @@ def estado():
     inver = invertido()
     if inver[0]['Cantidad_from'] == None:
         flash("No hay compras de Cryptomonedas")
-        return render_template("status.html", inv = [{'Cantidad_from': 0}], rec = [{'Cantidad_to': 0}], vComp = 0, vAct = 0, cabecera = 'status.html')
+        return render_template("status.html", inv = [{'Cantidad_from': 0}], rec = [{'Cantidad_to': 0}], vComp = 0, vAct = 0, ganancia = 0, cabecera = 'status.html')
         
     else:   
         
@@ -126,7 +126,7 @@ def estado():
             vActi = totalActivo_una_consulta()
 
 
-            return render_template("status.html", inv = inv, rec = rec, vComp = vComp , vAct = vActi, cabecera = 'status.html')
+            return render_template("status.html", inv = inv, rec = rec, vComp = vComp , vAct = vActi, ganancia = vActi - vComp, cabecera = 'status.html')
         except Exception as e:
             print(e)
             flash("Error de calculo intentelo mas tarde")
