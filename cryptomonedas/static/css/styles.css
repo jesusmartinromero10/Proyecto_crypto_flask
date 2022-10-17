@@ -79,3 +79,7 @@ nav{
 #movimientos tr td {
     border-right: solid 1px;
 }
+
+#sinmov {
+    text-align: center;
+}
