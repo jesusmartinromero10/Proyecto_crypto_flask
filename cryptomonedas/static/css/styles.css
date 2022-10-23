@@ -90,3 +90,16 @@ nav{
 #perdida {
     color: red
 }
+
+#igual {
+    color: blue;
+}
+
+#botton {
+    width: 33.33%;
+    
+    display: flex;
+    justify-content: center;
+    margin-left: 35%;
+
+}

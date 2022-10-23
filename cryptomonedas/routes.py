@@ -44,7 +44,7 @@ def comprar():
                     tasa = ("{:.8f}".format(tasa))
                     valorCantidad2._value = valorCantidad
                     
-                    return render_template("/purchase.html", resultado = total, Tasa = tasa, formulario = moneda, cabecera = "purchase.html", cantidad = "texto", valorinput = valorCantidad )
+                    return render_template("/purchase.html", resultado = total, Tasa = tasa, formulario = moneda, cabecera = "purchase.html", cantidad = "texto", valorinput = valorCantidad, texmoneda = moneda.moneda_to.data)
                 except Exception as e:
                     print(e)
                     flash("Error conexion con Api, intentelo pasados unos minutos")

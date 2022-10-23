@@ -47,7 +47,7 @@
             {% if messages %}
         <article class="messages">
             {% for msg in messages %}
-            <p class='error'>{{ msg }}</p>
+            <p class='error'><span class="material-symbols-outlined">info</span>{{ msg }}</p>
             {% endfor %}
         </article>
         {% endif %}

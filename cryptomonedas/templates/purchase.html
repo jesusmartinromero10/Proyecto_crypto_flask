@@ -22,11 +22,7 @@
         {% endfor %}
     {% endif %}
 
-    <a href="/purchase" data-tooltip="Pulsa para calcular precio" data-placement="bottom">
-        <span class="material-symbols-outlined">
-        {{ formulario.submitCalcular }}
-        </span>
-   </a>
+    
 
    {{ formulario.moneda_to.label }}
     {{ formulario.moneda_to }}
@@ -35,11 +31,17 @@
         <p>{{ error }}</p>
         {% endfor %}
     {% endif %}
-   
-   <p>Q: {{ resultado }}</p>
-   <p>P.U: {{ Tasa }}</p>
 
-   <a href="/purchase" data-tooltip="Pulsa para hacer la compra" data-placement="bottom">
+    <a href="/purchase" data-tooltip="Pulsa para calcular precio" data-placement="bottom" id="botton">
+        <span class="material-symbols-outlined">
+        {{ formulario.submitCalcular }}
+        </span>
+   </a>
+   
+   <p>Q: {{ resultado ~ " " ~ texmoneda}}</p>
+   <p>P.U: {{ Tasa ~ " " ~ texmoneda}}</p>
+
+   <a href="/purchase" data-tooltip="Pulsa para hacer la compra" data-placement="bottom" id="botton">
     <span class="material-symbols-outlined">
    {{ formulario.submitCompra }}
     </span>
